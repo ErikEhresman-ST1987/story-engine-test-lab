@@ -5,7 +5,7 @@ class FarmHost{
  snapshot(){return this.bridge.snapshot()}
  restore(saved,phase){
   const candidate=new GameplayBridge(saved),g=candidate.snapshot();
-  if(phase==='active'&&(!g.dinner.accepted||g.dinner.completed))throw Error('Inconsistent farm objective');
+  if(phase==='active'&&(!g.dinner.accepted||g.dinner.completed||g.receipts.length!==0))throw Error('Inconsistent farm objective');
   if(phase==='completed'&&(!g.dinner.completed||g.receipts.filter(x=>x==='juliette:dinner:delivery').length!==1))throw Error('Inconsistent farm completion');
   if(['invitation','declined'].includes(phase)&&(g.dinner.accepted||g.dinner.completed))throw Error('Inconsistent farm invitation');
   this.bridge=candidate;
