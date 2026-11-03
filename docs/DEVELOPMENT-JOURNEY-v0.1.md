@@ -126,3 +126,15 @@ After that, decide whether the proof is sufficiently reliable to formalize a reu
 - Added a dedicated **v0.5 browser compatibility panel** with its own storage key, `story-lab-update-test-v1`. It creates v1 checkpoints, performs approved v1→v2 migration, checks gameplay state is unchanged, rejects unknown versions, and restores the panel's record after reload.
 - Increment 4's `story-lab-integrated-v1` storage key is not touched.
 - **Pending:** new v0.5 workflow success and user verification in iPad Safari, including reload and offline behavior. This panel is a focused migration demonstration, not a general content-editing interface.
+
+### Increment 5 — iPad browser acceptance evidence (November 2, 2026)
+
+The user supplied three iPad Safari screenshots of the isolated compatibility panel:
+
+1. **Approved migration:** v1 completed → v2 completed; original and updated delivery receipts both equal 1; original preserved = true. The interface reported successful migration with inventory, facts, and receipt preserved.
+2. **Refresh:** after reloading Safari, the compatibility panel reported restored state and displayed the same v1/v2 completed phases and receipt counts.
+3. **Incompatible update:** the interface reported that an unknown update was rejected, and displayed the original completed save unchanged.
+
+**Result:** Increment 5 accepted for its scoped v1→v2 migration demonstration. This does not prove arbitrary story revisions, actual power-loss atomicity, or every failure/recovery scenario. The separate Increment 4 completed state remained visible in the screenshots.
+
+**Reusable deployment lesson:** Preserve original save bytes while testing a migration; keep schema version distinct from content version; require an explicit checkpoint mapping; never replay gameplay rewards or inventory deductions during migration; test persistence after browser reload and refusal of unsupported versions.
