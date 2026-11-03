@@ -1,6 +1,7 @@
 'use strict';
 const {Compiler,Story}=require('inkjs/full');
 const {validateManifest}=require('./validate-manifest.cjs');
+const {validatePaths}=require('./validate-paths.cjs');
 function compilePackage(manifest,files){
  validateManifest(manifest);
  if(!files||typeof files!=='object')throw Error('Ink source files required');
@@ -19,7 +20,8 @@ function compilePackage(manifest,files){
    const finish=new Story(compiled);finish.ChoosePathString(chapter.completion);
    while(finish.canContinue)finish.Continue();
   }catch(e){throw Error('Invalid Ink checkpoint in '+chapter.id+': '+e.message)}
-  chapters[chapter.id]={compiled,entry:chapter.entry,completion:chapter.completion};
+  const pathReport=validatePaths(compiled,{entry:chapter.entry});
+  chapters[chapter.id]={compiled,entry:chapter.entry,completion:chapter.completion,pathReport};
  }
  return {storyId:manifest.storyId,contentVersion:manifest.contentVersion,sourceApproval:manifest.sourceApproval,chapters};
 }
