@@ -147,3 +147,12 @@ The user supplied three iPad Safari screenshots of the isolated compatibility pa
 - **Isolation:** The original Increment 1–5 interfaces and save keys remain unchanged. The new browser panel uses `story-lab-two-hosts-v1` and a versioned v0.6 offline shell.
 - **Verification added:** Automated tests for both host cycles, reload restoration, receipt deduplication, event gating, invalid saves, and independent host states. **Status:** implementation committed; GitHub Actions result and iPad Safari real-use acceptance are pending.
 - **Known limits:** This is not a production Stranded Colony integration. The new coordinator uses a deliberately small two-choice/one-objective contract, and does not yet demonstrate concurrent multi-chapter arcs or general story migration. Existing Juliette integrated demo has not been refactored to use the coordinator; the two-host panel is the portability proof.
+
+
+### Increment 6 — iPad Safari acceptance (2026-11-02)
+
+- User tested the deployed v0.6 two-host panel in Safari on iPad. Both Farm and Colony host objectives reached `completed`, with exactly one corresponding receipt and the expected narrative fact.
+- After Safari refresh, both hosts still displayed `completed`, their single receipts, and their story facts. This verifies browser restoration of both completed states in the tested scenario.
+- An earlier Safari tab displayed v0.5 while the embedded browser showed v0.6; opening the refreshed test URL resolved access to v0.6. Preserve this cache/update observation as a deployment lesson.
+- **Acceptance:** Increment 6 functional browser test and completed-state reload persistence passed. Not yet proof of every interruption point, cross-device transfer, or production integration.
+- **Next candidate:** Increment 7 — concurrent active stories with shared narrative facts and independently persisted state; keep isolated from Little Field Farm production.
