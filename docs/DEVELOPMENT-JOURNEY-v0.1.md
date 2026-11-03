@@ -109,3 +109,13 @@ After that, decide whether the proof is sufficiently reliable to formalize a reu
 ## Current decision
 
 **Continue with Ink + inkjs as the leading candidate.** The runtime has earned further testing. The reusable engine is **not yet declared production-ready**.
+
+
+## Increment 5 — Story-content update compatibility (in progress)
+
+- **Problem:** Serialized Ink instruction pointers may no longer correspond to revised compiled story content. Silently loading old state into changed content risks broken progress and repeated gameplay consequences.
+- **Change:** Added a separate compatibility-policy proof with explicit content versions, schema validation, a known v1→v2 checkpoint mapping, preservation of gameplay state, and fail-closed handling for unknown versions. The existing connected iPad demo and its storage key are unchanged.
+- **Automated coverage added:** unchanged-version Ink restoration; migration from invitation, collecting, declined, and completed phases; receipt preservation; repeat-delivery prevention; invalid versions and inconsistent receipts.
+- **Deployment playbook:** [Increment 5 deployment and verification](INCREMENT-5-DEPLOYMENT.md).
+- **Status:** Code and tests committed; workflow and user-device acceptance are still required. Do not mark this increment verified merely because the code was committed.
+- **Important limit:** This is an explicit migration for one small story, not a generic guarantee that arbitrary Ink revisions preserve saves.
