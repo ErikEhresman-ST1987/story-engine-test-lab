@@ -138,3 +138,12 @@ The user supplied three iPad Safari screenshots of the isolated compatibility pa
 **Result:** Increment 5 accepted for its scoped v1→v2 migration demonstration. This does not prove arbitrary story revisions, actual power-loss atomicity, or every failure/recovery scenario. The separate Increment 4 completed state remained visible in the screenshots.
 
 **Reusable deployment lesson:** Preserve original save bytes while testing a migration; keep schema version distinct from content version; require an explicit checkpoint mapping; never replay gameplay rewards or inventory deductions during migration; test persistence after browser reload and refusal of unsupported versions.
+
+
+## Increment 6 — Two host adapters (implementation awaiting acceptance)
+
+- **Question:** Is the narrative coordination reusable outside the Juliette farm simulation?
+- **Approach:** Extracted `src/story-coordinator.cjs` to own Ink state, choice routing, event completion and serialized dialogue. Added separate `src/farm-host.cjs` and `src/colony-host.cjs` adapters with different resources and event names. The colony fixture uses turn-based scavenging, waiting, and an explicit survey-team assistance action.
+- **Isolation:** The original Increment 1–5 interfaces and save keys remain unchanged. The new browser panel uses `story-lab-two-hosts-v1` and a versioned v0.6 offline shell.
+- **Verification added:** Automated tests for both host cycles, reload restoration, receipt deduplication, event gating, invalid saves, and independent host states. **Status:** implementation committed; GitHub Actions result and iPad Safari real-use acceptance are pending.
+- **Known limits:** This is not a production Stranded Colony integration. The new coordinator uses a deliberately small two-choice/one-objective contract, and does not yet demonstrate concurrent multi-chapter arcs or general story migration. Existing Juliette integrated demo has not been refactored to use the coordinator; the two-host panel is the portability proof.
