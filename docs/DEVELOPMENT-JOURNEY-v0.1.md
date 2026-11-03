@@ -156,3 +156,13 @@ The user supplied three iPad Safari screenshots of the isolated compatibility pa
 - An earlier Safari tab displayed v0.5 while the embedded browser showed v0.6; opening the refreshed test URL resolved access to v0.6. Preserve this cache/update observation as a deployment lesson.
 - **Acceptance:** Increment 6 functional browser test and completed-state reload persistence passed. Not yet proof of every interruption point, cross-device transfer, or production integration.
 - **Next candidate:** Increment 7 — concurrent active stories with shared narrative facts and independently persisted state; keep isolated from Little Field Farm production.
+
+
+## Increment 7 — Concurrent stories and shared narrative memory
+
+- Added two independent Ink instances for Keiko's school garden and Juliette's community dinner, both active at once if accepted.
+- One shared narrative facts record lets each story display a reaction to the other story's completion, without modifying the other Ink instance.
+- Isolated save key `story-lab-multi-v1`; each story retains its own Ink state, phase, and dialogue, alongside shared facts and completion receipts. Duplicate completion is blocked. Invalid saves are rejected without overwriting stored bytes.
+- Added automated tests for simultaneous active stories, cross-story memory, independent restoration, declined choices, and invalid receipts/versions.
+- **Scope limitation:** completion buttons simulate gameplay completion, not actual crop/order events. This is a concurrency and memory proof, not a full storylet eligibility or multi-chapter system. Earlier tests and production games remain unchanged.
+- **Status:** implementation committed; automated deployment and iPad Safari acceptance pending.
