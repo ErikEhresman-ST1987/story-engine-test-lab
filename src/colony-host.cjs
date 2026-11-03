@@ -7,7 +7,7 @@ class ColonyHost{
   if(!saved||saved.version!==1||!Number.isSafeInteger(saved.supplies)||saved.supplies<0||!Number.isSafeInteger(saved.turn)||saved.turn<0||!saved.mission||typeof saved.mission.accepted!=='boolean'||typeof saved.mission.completed!=='boolean'||!Array.isArray(saved.receipts)||!saved.facts||typeof saved.facts!=='object')throw Error('Invalid colony save');
   const receipt=saved.receipts.filter(x=>x==='colony:survey:assist').length;
   if(saved.receipts.some(x=>typeof x!=='string')||receipt>1)throw Error('Invalid colony receipt');
-  if(phase==='active'&&(!saved.mission.accepted||saved.mission.completed))throw Error('Inconsistent colony objective');
+  if(phase==='active'&&(!saved.mission.accepted||saved.mission.completed||receipt!==0))throw Error('Inconsistent colony objective');
   if(phase==='completed'&&(!saved.mission.accepted||!saved.mission.completed||receipt!==1||saved.facts.survey_team_assisted!==true))throw Error('Inconsistent colony completion');
   if(['invitation','declined'].includes(phase)&&(saved.mission.accepted||saved.mission.completed||receipt))throw Error('Inconsistent colony invitation');
   this.state=structuredClone(saved);
