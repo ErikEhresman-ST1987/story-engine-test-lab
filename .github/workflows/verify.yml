@@ -5,6 +5,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: story-lab-pages-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   inkjs-tests:
     runs-on: ubuntu-latest
