@@ -119,3 +119,10 @@ After that, decide whether the proof is sufficiently reliable to formalize a reu
 - **Deployment playbook:** [Increment 5 deployment and verification](INCREMENT-5-DEPLOYMENT.md).
 - **Status:** Code and tests committed; workflow and user-device acceptance are still required. Do not mark this increment verified merely because the code was committed.
 - **Important limit:** This is an explicit migration for one small story, not a generic guarantee that arbitrary Ink revisions preserve saves.
+
+### Increment 5 browser acceptance gate (November 2, 2026)
+
+- Automated compatibility tests and Pages deployment passed in GitHub Actions run #34 (commit `d38d331`).
+- Added a dedicated **v0.5 browser compatibility panel** with its own storage key, `story-lab-update-test-v1`. It creates v1 checkpoints, performs approved v1→v2 migration, checks gameplay state is unchanged, rejects unknown versions, and restores the panel's record after reload.
+- Increment 4's `story-lab-integrated-v1` storage key is not touched.
+- **Pending:** new v0.5 workflow success and user verification in iPad Safari, including reload and offline behavior. This panel is a focused migration demonstration, not a general content-editing interface.
