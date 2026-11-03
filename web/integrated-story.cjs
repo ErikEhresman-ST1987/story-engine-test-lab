@@ -1,6 +1,5 @@
 module.exports=`Juliette is preparing a community dinner.
 + [Volunteer to help.]
-    ~ temp accepted = true
     Wonderful! Please bring me two carrots and one wheat.
     -> END
 + [Ask for more time.]
