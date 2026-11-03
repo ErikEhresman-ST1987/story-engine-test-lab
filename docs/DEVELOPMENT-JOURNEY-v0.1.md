@@ -166,3 +166,10 @@ The user supplied three iPad Safari screenshots of the isolated compatibility pa
 - Added automated tests for simultaneous active stories, cross-story memory, independent restoration, declined choices, and invalid receipts/versions.
 - **Scope limitation:** completion buttons simulate gameplay completion, not actual crop/order events. This is a concurrency and memory proof, not a full storylet eligibility or multi-chapter system. Earlier tests and production games remain unchanged.
 - **Status:** implementation committed; automated deployment and iPad Safari acceptance pending.
+
+
+## Production System phase — consolidation started (November 3, 2026)
+
+The user approved replacing further open-ended technical demonstrations with a complete practical system: reusable engine, tested OmniQuest-to-Ink authoring method, repeatable game installation, deployment/maintenance instructions, and end-to-end Little Field Farm story verification. We are **not** declaring the engine production-ready.
+
+First checkpoint: [Production Consolidation Inventory](PRODUCTION-CONSOLIDATION-v0.1.md). It maps the existing eight increments to reusable core, game adapters, lab-only demonstrations, and unresolved production contracts. The immediate gate is additive package extraction with two-host regression tests, without modifying production games or old test saves.
