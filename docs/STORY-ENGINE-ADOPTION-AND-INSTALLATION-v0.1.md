@@ -73,3 +73,11 @@ The snippet is an **integration illustration**, not an approved production insta
 - `ChapterSession.event()` now blocks events after a chapter checkpoint is completed, avoiding duplicate host effects while awaiting the next chapter.
 - Regression coverage: `tests/shared-game-narrative.test.cjs`.
 - **Remaining limits:** This is in-memory coherence, not an atomic disk/localStorage write; the game must supply authoritative event permission checks and receipt idempotency. The shared host uses a marker snapshot for each narrative session and the game state lives only at the outer envelope. Future installs must not independently persist inner narrative snapshots. Shared-game cross-story event authorization, version migrations, and browser crash/reload acceptance still require verification.
+
+## Increment: persistent save adapter (2026-11-05)
+
+- `packages/story-engine/narrative-save-store.cjs` introduces `NarrativeSaveStore({storage,key})` for browser-like storage. Use a **new isolated key** during integration, never overwrite an existing game's production key.
+- `write(snapshot, validate)` validates the entire candidate with a caller-supplied function (for example, construct a new `SharedGameNarrative` from the snapshot) before serializing and replacing one active key. `read()`, `restoreInto(game)` and `export()` support recovery and inspection.
+- One versioned envelope contains both game and narrative state; no partial game-vs-story writes across different keys. Unknown save formats and malformed JSON are rejected, not silently reset.
+- Tests in `tests/narrative-save-store.test.cjs` cover reload, failed validation, storage rejection and unknown format.
+- **Limits:** This does not guarantee browser crash atomicity, backup retention, power-loss durability, storage quota behavior, or migrations. It depends on the storage implementation's single-key write semantics. A production game must provide export/backup, explicit migration, user-visible failure handling, and real Safari offline/restart tests before installation approval.
