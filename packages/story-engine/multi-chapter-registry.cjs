@@ -4,7 +4,7 @@ const SCHEMA=1;
 class MultiChapterRegistry{
  constructor({packages,hostFactory,save}){
   if(!Array.isArray(packages)||!packages.length||typeof hostFactory!=='function')throw Error('Invalid registry setup');
-  this.packages=new Map();this.sessions=new Map();
+  this.hostFactory=hostFactory;this.packages=new Map();this.sessions=new Map();
   for(const pkg of packages){
    if(!pkg||!pkg.manifest||!pkg.compiledChapters||this.packages.has(pkg.manifest.storyId))throw Error('Duplicate or invalid story package');
    const id=pkg.manifest.storyId;
@@ -24,18 +24,9 @@ class MultiChapterRegistry{
   const candidates=new Map();
   for(const [id,pkg] of this.packages){
    if(!Object.hasOwn(saved.stories,id))throw Error('Missing story save');
-   const original=this.get(id);
-   const host=original.host;
-   const previous=host.snapshot();
-   // Validate Ink and host save in a temporary host before committing any live state.
-   const shadow={snapshot:()=>structuredClone(previous),restore:(value,phase)=>host.restore(value,phase),event:()=>{throw Error('Validation host cannot play')}};
-   try{
-    const candidate=new ChapterSession({...pkg,host:shadow,save:saved.stories[id]});
-    candidates.set(id,candidate);
-   }finally{host.restore(previous,'active')}
+   candidates.set(id,new ChapterSession({...pkg,host:this.hostFactory(id),save:saved.stories[id]}));
   }
-  // Restore each original session only after all candidate saves validate.
-  for(const [id,snapshot] of Object.entries(saved.stories))this.get(id).restore(snapshot);
+  this.sessions=candidates;
  }
 }
 module.exports={MultiChapterRegistry};
