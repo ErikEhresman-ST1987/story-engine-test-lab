@@ -1,0 +1,14 @@
+{
+ "schema":1,
+ "storyId":"sample-three-chapter",
+ "contentVersion":"0.1.0",
+ "sourceApproval":"TEST-FIXTURE-ONLY-NOT-APPROVED-NARRATIVE",
+ "chapters":[
+  {"id":"chapter-1","inkFile":"chapter-1.ink","entry":"start","completion":"complete"},
+  {"id":"chapter-2","inkFile":"chapter-2.ink","entry":"start","completion":"complete"},
+  {"id":"chapter-3","inkFile":"chapter-3.ink","entry":"start","completion":"complete"}
+ ],
+ "requiresFacts":[],
+ "events":["harvest.carrot","harvest.wheat","deliver.dinner"],
+ "effects":["juliette:dinner:delivery"]
+}
