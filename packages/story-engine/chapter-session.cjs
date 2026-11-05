@@ -19,7 +19,7 @@ class ChapterSession{
  view(){return {chapter:this.manifest.chapters[this.index].id,completed:this.completed,lines:[...this.lines],choices:this.story.currentChoices.map((c,index)=>({index,text:c.text}))}}
  choose(index){if(this.completed||!Number.isInteger(index)||index<0||index>=this.story.currentChoices.length)throw Error('Invalid chapter choice');this.story.ChooseChoiceIndex(index);return this.advance()}
  event(name){
-  if(this.completed)return {changed:false,reason:'Story complete'};
+  if(this.completed||this.chapterReady)return {changed:false,reason:'Chapter already complete'};
   if(!this.manifest.events.includes(name))throw Error('Event not declared in manifest');
   const result=this.host.event(name);
   if(!result||typeof result.changed!=='boolean')throw Error('Invalid host result');
