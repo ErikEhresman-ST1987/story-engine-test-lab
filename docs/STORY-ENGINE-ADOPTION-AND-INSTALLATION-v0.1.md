@@ -58,3 +58,10 @@ The snippet is an **integration illustration**, not an approved production insta
 - Pass `packages: [{manifest,compiledChapters}]` and `hostFactory(storyId)`. Call `view(id)`, `choose(id,index)`, `event(id,name)`, `nextChapter(id)`, `snapshot()`, and `restore(save)`.
 - Each story has an independent chapter session and host fixture. Restore creates candidate sessions and replaces the registry only after all validate; an invalid second story must leave the first intact.
 - **Important limitation:** this is a prototype for independent host fixtures, **not** the production pattern for a shared Farm inventory. Real games need one authoritative host save owner, coordinated effects, invitations and facts, plus safe durable storage. Do not install this prototype into production unchanged.
+
+## Increment: unified narrative manager prototype (2026-11-05)
+
+- `packages/story-engine/narrative-manager.cjs` combines invitation states (hidden, available, deferred, declined, active, completed), eligibility facts, dependent-story unlocks, and the multi-chapter registry. Tests: `tests/narrative-manager.test.cjs`.
+- Instantiate `new NarrativeManager({packages,hostFactory,save})`; use `view(id)`, `decide(id,'accept'|'later'|'decline')`, `revisit(id)`, `fact(name,true)`, `choose(id,index)`, `event(id,name)`, `nextChapter(id)`, and `snapshot()`/`restore(save)`.
+- Save validation creates a candidate registry before replacing live narrative state. Completion unlocks dependent stories by setting `<storyId>_completed`.
+- **Still not production-ready:** each story currently gets a separate host adapter instance; shared farm inventory, truly atomic durable writes, migration and invitation-to-dialogue presentation remain to be integrated and tested. Host adapters must be trusted to verify objective completion. Do not copy this prototype into a production game without these gates.
