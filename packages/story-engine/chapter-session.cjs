@@ -23,11 +23,11 @@ class ChapterSession{
   if(!this.manifest.events.includes(name))throw Error('Event not declared in manifest');
   const result=this.host.event(name);
   if(!result||typeof result.changed!=='boolean')throw Error('Invalid host result');
+  if(result.completed===true&&result.changed===true)this._completeAfterHostEvent();
   return result;
  }
- completeChapter(confirmation){
+ _completeAfterHostEvent(){
   if(this.completed||this.chapterReady)return false;
-  if(!confirmation||confirmation.completed!==true||confirmation.changed!==true)throw Error('Host confirmation required');
   const c=this.manifest.chapters[this.index],candidate=new Story(this.compiledChapters[c.id].compiled||this.compiledChapters[c.id]);
   candidate.ChoosePathString(c.completion);
   const final=[];while(candidate.canContinue)final.push(candidate.Continue().trim());
