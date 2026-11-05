@@ -11,10 +11,10 @@ class SharedGameNarrative{
  }
  makeManager(){
   const game=this.game;
-  return new NarrativeManager({packages:this.packages,hostFactory:()=>({
+  return new NarrativeManager({packages:this.packages,hostFactory:(id)=>({
    snapshot:()=>({shared:true}),
    restore:()=>{},
-   event:name=>game.event(name)
+   event:name=>game.event(name,{storyId:id,chapterId:this.manager.registry.view(id).chapter})
   })});
  }
  view(id){return this.manager.view(id)}
@@ -29,9 +29,9 @@ class SharedGameNarrative{
   if(!saved||saved.schema!==SCHEMA)throw Error('Invalid shared game save');
   const game=this.createGame();
   game.restore(saved.game);
-  const manager=new NarrativeManager({packages:this.packages,hostFactory:()=>({
+  const manager=new NarrativeManager({packages:this.packages,hostFactory:(id)=>({
    snapshot:()=>({shared:true}),restore:s=>{if(!s||s.shared!==true)throw Error('Invalid shared host marker')},
-   event:name=>game.event(name)
+   event:name=>game.event(name,{storyId:id,chapterId:manager.registry.view(id).chapter})
   }),save:saved.narrative});
   this.game=game;this.manager=manager;
  }
