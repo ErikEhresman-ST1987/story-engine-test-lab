@@ -2,8 +2,10 @@
 const {Compiler,Story}=require('inkjs/full');
 const {validateManifest}=require('./validate-manifest.cjs');
 const {validatePaths}=require('./validate-paths.cjs');
-function compilePackage(manifest,files){
+const {validateHostContract}=require('./host-contract.cjs');
+function compilePackage(manifest,files,hostContract){
  validateManifest(manifest);
+ if(hostContract)validateHostContract(manifest,hostContract);
  if(!files||typeof files!=='object')throw Error('Ink source files required');
  const chapters={};
  for(const chapter of manifest.chapters){
