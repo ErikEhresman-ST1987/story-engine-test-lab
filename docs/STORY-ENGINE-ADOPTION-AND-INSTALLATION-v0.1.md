@@ -81,3 +81,10 @@ The snippet is an **integration illustration**, not an approved production insta
 - One versioned envelope contains both game and narrative state; no partial game-vs-story writes across different keys. Unknown save formats and malformed JSON are rejected, not silently reset.
 - Tests in `tests/narrative-save-store.test.cjs` cover reload, failed validation, storage rejection and unknown format.
 - **Limits:** This does not guarantee browser crash atomicity, backup retention, power-loss durability, storage quota behavior, or migrations. It depends on the storage implementation's single-key write semantics. A production game must provide export/backup, explicit migration, user-visible failure handling, and real Safari offline/restart tests before installation approval.
+
+## Increment: backup and explicit recovery (2026-11-05)
+
+- `packages/story-engine/recoverable-save-store.cjs` extends the single-key store with a `<key>:backup` slot containing the **previous validated save**. The active slot remains `<key>`.
+- `write(snapshot,validate)` validates new and current data before copying the previous active save to backup and writing the new active save. `recover(validate)` reads and validates the backup **without replacing the active save**. `restoreBackupInto(target,validate)` explicitly restores it into a supplied runtime.
+- Tests: `tests/recoverable-save-store.test.cjs`. A failed backup write leaves the active slot unchanged. Invalid active data is not promoted into backup.
+- **Limits:** A two-key backup-then-active sequence is not atomic across both keys; interrupted writes can leave a backup newer than the active slot. No automatic recovery is attempted, so the player must be informed and approve recovery. A one-generation backup can be overwritten by later saves; exportable external backups and retention policy remain recommended. Real Safari storage quota/offline tests still required.
