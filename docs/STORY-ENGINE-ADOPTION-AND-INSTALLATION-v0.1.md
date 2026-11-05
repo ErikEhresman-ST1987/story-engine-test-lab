@@ -65,3 +65,11 @@ The snippet is an **integration illustration**, not an approved production insta
 - Instantiate `new NarrativeManager({packages,hostFactory,save})`; use `view(id)`, `decide(id,'accept'|'later'|'decline')`, `revisit(id)`, `fact(name,true)`, `choose(id,index)`, `event(id,name)`, `nextChapter(id)`, and `snapshot()`/`restore(save)`.
 - Save validation creates a candidate registry before replacing live narrative state. Completion unlocks dependent stories by setting `<storyId>_completed`.
 - **Still not production-ready:** each story currently gets a separate host adapter instance; shared farm inventory, truly atomic durable writes, migration and invitation-to-dialogue presentation remain to be integrated and tested. Host adapters must be trusted to verify objective completion. Do not copy this prototype into a production game without these gates.
+
+## Increment: shared game state and coherent in-memory restore (2026-11-05)
+
+- `packages/story-engine/shared-game-narrative.cjs` creates **one game instance** and connects every narrative session to its event handler; game inventory is not cloned per NPC.
+- `snapshot()` returns a single envelope with `game` and `narrative` fields. `restore()` validates a candidate game and candidate narrative manager before replacing the active pair, so a malformed save leaves live state unchanged.
+- `ChapterSession.event()` now blocks events after a chapter checkpoint is completed, avoiding duplicate host effects while awaiting the next chapter.
+- Regression coverage: `tests/shared-game-narrative.test.cjs`.
+- **Remaining limits:** This is in-memory coherence, not an atomic disk/localStorage write; the game must supply authoritative event permission checks and receipt idempotency. The shared host uses a marker snapshot for each narrative session and the game state lives only at the outer envelope. Future installs must not independently persist inner narrative snapshots. Shared-game cross-story event authorization, version migrations, and browser crash/reload acceptance still require verification.
