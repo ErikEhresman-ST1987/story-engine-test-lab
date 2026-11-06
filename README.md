@@ -1,5 +1,7 @@
 # Story Engine Test Lab
 
+**For current cross-game story integration guidance, start with [Story Integration — START HERE](docs/integrations/START-HERE.md).** The original lab-readiness notes below describe an earlier testing stage and are retained as historical context.
+
 Standalone verification of **Ink + inkjs** for offline-first browser games. Separate from Little Field Farm: no farm saves or game code are changed.
 
 ## Automated verification
