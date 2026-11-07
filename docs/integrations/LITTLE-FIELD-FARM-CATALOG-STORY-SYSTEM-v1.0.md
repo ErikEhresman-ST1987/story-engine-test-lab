@@ -1,3 +1,7 @@
+> **HISTORICAL / SUPERSEDED — 2026-11-07:** This document describes the catalog-only Little Field Farm implementation from PR #9. It is **not** the current farm integration. Ink/inkjs was restored on `main` in [Little Field Farm PR #10](https://github.com/ErikEhresman-ST1987/little-field-farm/pull/10). The operator has verified the restored three-chapter Juliette story and saved progress after refresh. The active `scene-rebuild/index.html` loads `story-ink-bundle.js` and `story-ink-registry.js`, not the catalog runner. **Do not follow this document's catalog-only story-addition workflow for current Little Field Farm development.** See [Little Field Farm PROJECT-CONTINUITY.md](https://github.com/ErikEhresman-ST1987/little-field-farm/blob/main/PROJECT-CONTINUITY.md) and inspect current repository code for the active Ink workflow. The historical text below is preserved for decision context.
+
+---
+
 # Little Field Farm — Reusable Story Catalog Integration v1.0
 
 **Status:** Merged and player-tested in Little Field Farm on 2026-11-06. This document describes the **current farm implementation**, not the earlier Ink/inkjs prototype.
