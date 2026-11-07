@@ -1,45 +1,42 @@
 # Story Integration — START HERE
 
-**Integration index for offline-first game storytelling.** Updated 2026-11-06 after Little Field Farm merged its reusable catalog-based story system. The Ink/inkjs laboratory remains an optional, distinct implementation.
+**Current direction (2026-11-06):** Ink/inkjs is the active narrative runtime in Little Field Farm after [restoration PR #10](https://github.com/ErikEhresman-ST1987/little-field-farm/pull/10). The earlier catalog-runner implementation in [PR #9](https://github.com/ErikEhresman-ST1987/little-field-farm/pull/9) is historical, not the current installation recipe.
 
-## Current Little Field Farm implementation (start here for farm stories)
+## Working implementation and evidence
+- [Little Field Farm current runtime](https://github.com/ErikEhresman-ST1987/little-field-farm/tree/main/scene-rebuild): `story-engine/`, `stories/juliette/*.ink`, `stories/juliette/manifest.json`, `compile-ink-stories.cjs`, `story-ink-entry.cjs`, generated `story-ink-bundle.js` and `story-ink-registry.js`, `story-unlocks.js`, and the host integration in `main.js`.
+- The farm build command is `npm run build:story`; its GitHub workflow checks compiled output, integration, syntax, save isolation, dialogue ordering and browser script dependencies.
+- Human iPad Safari playtesting confirmed *The Unexpected Dinner Guest* completes, progress survives reopening, and farm backup/restore works. The player also confirmed the merged build and test progress after returning Pages to `main`.
+- **Not yet proven:** a zero-rework installation into a different game, a second independent story, full offline acceptance in a second host, and crash-safe atomic persistence. Do not call this a drop-in engine until the portability test passes.
 
-**[Reusable Story Catalog Integration v1.0](LITTLE-FIELD-FARM-CATALOG-STORY-SYSTEM-v1.0.md)** is the authoritative description of the farm's current story runtime. The farm now uses editable `story-catalog.js`, generic `story-runner.js`, and catalog-driven `story-unlocks.js`, **not** the Ink runtime. Juliette's *The Unexpected Dinner Guest* was completed and persisted across Safari refresh in a player test; PR #9 merged into `main`. Backup/restore and second-story acceptance remain unverified. The earlier Ink Juliette contract and Ink integration examples below are historical references, not current farm authoring instructions.
+## Install into a new game — current provisional route
+1. Start with [Adoption and Installation](../STORY-ENGINE-ADOPTION-AND-INSTALLATION-v0.1.md) and the **actual working farm integration** above. The laboratory's `packages/story-engine/` is related but is not automatically synchronized with the farm's deployed copy.
+2. Preserve the approved story text. Author a manifest and chapter `.ink` files; compile them with a local pinned Ink/inkjs toolchain.
+3. Connect game-owned events, inventory, unlock rules, and unified save through a host adapter. The engine must not silently grant resources.
+4. Use versioned browser assets, local bundling, and an isolated save key for tests.
+5. Verify dialogue, objectives, repeated events, reload, backup/restore, malformed saves, and Safari/offline behavior before release.
 
-## Optional Ink/inkjs path for other games
-1. Decide whether the game needs dialogue, player choices, multi-chapter progression, or NPC invitations. Read [Adoption and Installation](../STORY-ENGINE-ADOPTION-AND-INSTALLATION-v0.1.md).
-2. Approve narrative using [OmniQuest-to-Ink workflow](../OMNIQUEST-TO-INK-WORKFLOW-v0.1.md) and [Game Narrative Profile](../GAME-NARRATIVE-PROFILE-HANDOFF-v0.1.md). The engine does not author or change approved stories.
-3. Reuse the reviewed engine code in [packages/story-engine](../../packages/story-engine/). It is CommonJS and must be bundled locally with inkjs for browser/offline use.
-4. Implement a **host-owned adapter** for verified gameplay events, inventory, receipts and one coherent save. Use [Story Engine Foundation](../STORY-ENGINE-FOUNDATION-v0.1.md) and [Production Hardening](../PRODUCTION-HARDENING-v0.1.md).
-5. For relationship-driven invitations, use [NPC Story Unlocks](LITTLE-FIELD-FARM-NPC-UNLOCKS-v1.0.md). Keep this gate separate from Ink chapter objectives.
-6. Test in isolation, including refresh, save recovery, unrelated orders, chapter transitions and offline behavior. Use [Browser Acceptance](../BROWSER-ACCEPTANCE-v0.1.md), then a real player playtest before merging.
+**Portability work is in progress.** These are known implementation steps, not a claim that a ready-to-copy generic installer exists. The next deliverable is a minimal independent host that proves which files/configuration are reusable and which adapter responsibilities remain game-specific.
 
-## Historical Ink farm example and reusable laboratory references
-- [Earlier Juliette Ink story contract](LITTLE-FIELD-FARM-APPROVED-STORY.md) — historical prototype with wheat and vegetable deliveries; superseded in the farm by *The Unexpected Dinner Guest*.
-- [NPC story progression implementation](LITTLE-FIELD-FARM-NPC-UNLOCKS-v1.0.md) — randomized saved order thresholds, two invitation slots, prerequisite story completion, test coverage, known limits.
-- [Verified farm integration](../VERIFIED-FARM-INTEGRATION.md) — early Safari iPad sample-story integration proof.
-- [Historical prototype notes](LITTLE-FIELD-FARM-HISTORICAL-PROTOTYPE.md) — **historical only**; sample content and 'not yet approved' statements are superseded.
-- [Little Field Farm live implementation](https://github.com/ErikEhresman-ST1987/little-field-farm/tree/main/scene-rebuild); older [Ink tests](https://github.com/ErikEhresman-ST1987/little-field-farm/tree/main/tests) do not verify the new catalog runner.
-- [Farm story merge PR #2](https://github.com/ErikEhresman-ST1987/little-field-farm/pull/2); [unlock merge PR #3](https://github.com/ErikEhresman-ST1987/little-field-farm/pull/3).
+## Historical references — preserve, do not use as current farm instructions
+- [Catalog Story System v1.0](LITTLE-FIELD-FARM-CATALOG-STORY-SYSTEM-v1.0.md) — working earlier JavaScript runner, superseded by PR #10.
+- [Earlier Juliette Ink contract](LITTLE-FIELD-FARM-APPROVED-STORY.md) and [historical prototype](LITTLE-FIELD-FARM-HISTORICAL-PROTOTYPE.md) — previous story/implementation stages.
+- [NPC Unlocks](LITTLE-FIELD-FARM-NPC-UNLOCKS-v1.0.md) — farm-specific unlock design; verify against current implementation before reuse.
+- [Production Hardening](../PRODUCTION-HARDENING-v0.1.md), [Browser Acceptance](../BROWSER-ACCEPTANCE-v0.1.md), and [OmniQuest-to-Ink workflow](../OMNIQUEST-TO-INK-WORKFLOW-v0.1.md).
 
 ## Ownership boundaries
-| Layer | Owns | Must not own |
+| Layer | Owns | Does not own |
 | --- | --- | --- |
-| OmniQuest | Approved narrative, character continuity and choices | Farm inventory changes |
-| Ink story package | Dialogue, branching, chapters, declared events | Unverified resource awards |
-| SharedGameNarrative | Narrative state, chapter checkpoint and story choices | Game-specific inventory or order fulfillment |
-| NPC unlock gate | Per-NPC completed orders, saved thresholds, prerequisites, max two invitations | Ink prose or chapter objectives |
-| Game host | Real gameplay, inventory, validated events, unified persistence, UI | Silent rewrites of approved narrative |
+| OmniQuest | Approved narrative and continuity | Farm resources |
+| Ink package | Dialogue, choices, chapters, declared story events | Unverified gameplay rewards |
+| Story coordinator | Narrative progress and checkpoint state | Inventory authorization |
+| NPC unlock gate | Invitations and prerequisites | Ink prose |
+| Game host | Inventory, verified events, persistence, UI and backups | Unapproved narrative changes |
 
-## Technical lessons and cautions
-- **Current farm runtime is catalog-based, not Ink.** Older Ink modules remain in the farm repository as legacy artifacts; the farm does not automatically track this lab. Reconcile any future shared code deliberately.
-- The NPC unlock helper lives in the farm at `scene-rebuild/story-unlocks.js`. It currently assumes four positional customer indices. For a new game, replace those with stable NPC IDs and adaptable counts.
-- Thresholds count lifetime completed orders. For sequels, choose cumulative thresholds or per-episode baselines explicitly.
-- Only Juliette is currently registered as a real farm story. Two-slot capacity and prerequisite logic passed earlier automated tests, but multi-story player acceptance of the new catalog runner is outstanding.
-- Earlier lab documents describe their historical verification state. Do not interpret those old readiness warnings as the current status of the Juliette farm implementation, or interpret one successful farm integration as universal production readiness.
-- Keep tests and experimental branches before changing a live game. Preserve the user's approved story text and avoid unrelated feature work.
-
-## Reference library
-[Production Consolidation](../PRODUCTION-CONSOLIDATION-v0.1.md) · [Production Hardening](../PRODUCTION-HARDENING-v0.1.md) · [Story Foundation](../STORY-ENGINE-FOUNDATION-v0.1.md) · [Step 1 Readiness Gate](../STEP-1-READINESS-GATE-v0.1.md) · [Little Field Farm Blueprint](../LITTLE-FIELD-FARM-INTEGRATION-BLUEPRINT-v0.1.md).
-
-**Maintenance:** This index is the starting point for future games. Add new proven integration patterns here and link to focused notes. Keep historical evidence; avoid creating a second competing instruction system.
+## Lessons retained
+- A green CI run proves only its tested scope; real Safari playtesting exposed the necessary final verification gate.
+- Avoid stale Safari assets with versioned script references.
+- Prevent ingredient delivery from skipping an outstanding dialogue choice.
+- A recovery-only save key protects live data during testing; decide the production save-key strategy explicitly.
+- Story completion must be confirmed before deducting items permanently; duplicate events must not pay twice.
+- Keep new story content declarative and avoid story-specific changes in the host whenever possible.
+- Do not infer universal portability from one successfully integrated game.
