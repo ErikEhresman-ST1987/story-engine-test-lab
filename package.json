@@ -4,7 +4,8 @@
   "version": "0.2.0",
   "scripts": {
     "test": "node --test tests/*.test.cjs",
-    "build": "node scripts/build-web.cjs"
+    "build": "node scripts/build-web.cjs && node scripts/package-install-kit.cjs",
+    "package": "node scripts/package-install-kit.cjs"
   },
   "dependencies": {
     "inkjs": "2.4.0"
