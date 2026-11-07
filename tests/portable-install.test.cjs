@@ -55,3 +55,16 @@ test('completed chapter cannot accept the same event twice',()=>{
  assert.equal(second.changed,false);
  assert.deepEqual(runtime.snapshot(),after);
 });
+
+test('restored registry owns the active host state, not the temporary factory instance',()=>{
+ const pkg=compileDirectory(fixture);
+ const first=new MultiChapterRegistry({packages:[pkg],hostFactory:()=>new IndependentHost()});
+ first.choose(pkg.manifest.storyId,0);
+ first.event(pkg.manifest.storyId,'harvest.carrot');
+ const saved=first.snapshot();
+ let factoryHost;
+ const restored=new MultiChapterRegistry({packages:[pkg],hostFactory:()=>{factoryHost=new IndependentHost();return factoryHost;},save:saved});
+ assert.equal(restored.get(pkg.manifest.storyId).host.snapshot().count,1);
+ assert.equal(factoryHost.snapshot().count,1);
+ assert.deepEqual(restored.snapshot(),saved);
+});
