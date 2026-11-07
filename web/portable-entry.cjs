@@ -51,3 +51,5 @@ $('#portable-deliver').onclick=()=>{const r=registry.event(id,'harvest.carrot');
 $('#portable-next').onclick=()=>{try{registry.nextChapter(id);status='Next chapter.';save();}catch(e){status=e.message;}render();};
 $('#portable-reset').onclick=()=>{if(!confirm('Reset only the portable browser test?'))return;localStorage.removeItem(KEY);create();status='Portable test reset.';render();};
 render();
+
+if('serviceWorker' in navigator)navigator.serviceWorker.register('./sw.js').catch(e=>{$('#portable-status').textContent='Offline cache registration failed: '+e.message;});
