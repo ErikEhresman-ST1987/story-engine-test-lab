@@ -30,6 +30,7 @@ function create(save){
  if(save&&save.schema!==1)throw Error('Unsupported portable save schema');
  game=new Game();
  registry=new MultiChapterRegistry({packages,hostFactory:()=>game,save:save?.narrative});
+ if(save){game=registry.get(id).host;}
 }
 function snapshot(){return {schema:1,narrative:registry.snapshot()};}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(snapshot()));status='Saved locally.';}catch(e){status='Save failed: '+e.message;}}
