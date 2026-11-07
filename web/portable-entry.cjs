@@ -19,7 +19,8 @@ class Game {
  snapshot(){return {resources:this.resources,deliveries:this.deliveries};}
  restore(s){if(!s||!Number.isSafeInteger(s.resources)||s.resources<0||!Number.isSafeInteger(s.deliveries)||s.deliveries<0)throw Error('Invalid host save');this.resources=s.resources;this.deliveries=s.deliveries;}
  event(name){
-  if(name!=='harvest.carrot'||this.resources<2||this.deliveries!==0)return {changed:false,completed:false};
+  const expected=['harvest.carrot','harvest.wheat','deliver.dinner'][this.deliveries];
+  if(name!==expected||this.resources<2)return {changed:false,completed:false};
   this.resources-=2;this.deliveries++;
   return {changed:true,completed:true};
  }
@@ -44,10 +45,11 @@ function render(){
  for(const choice of view.choices){const b=document.createElement('button');b.textContent=choice.text;b.onclick=()=>{registry.choose(id,choice.index);save();render();};$('#portable-choices').append(b);}
  $('#portable-state').textContent=JSON.stringify({chapter:view.chapter,completed:view.completed,resources:game.resources,deliveries:game.deliveries},null,2);
  $('#portable-status').textContent=status;
- $('#portable-next').disabled=view.completed;
+ $('#portable-next').disabled=view.completed||!registry.get(id).chapterReady;
+ $('#portable-deliver').textContent=['Deliver carrots','Deliver wheat','Complete dinner'][Math.min(game.deliveries,2)];
 }
 $('#portable-harvest').onclick=()=>{game.resources++;save();render();};
-$('#portable-deliver').onclick=()=>{const r=registry.event(id,'harvest.carrot');status=r.completed?'Authorized delivery completed.':'Delivery denied: harvest two carrots first, or chapter already completed.';save();render();};
+$('#portable-deliver').onclick=()=>{const event=['harvest.carrot','harvest.wheat','deliver.dinner'][Math.min(game.deliveries,2)];const r=registry.event(id,event);status=r.completed?'Authorized objective completed.':'Delivery denied: harvest two carrots first, or chapter already completed.';save();render();};
 $('#portable-next').onclick=()=>{try{registry.nextChapter(id);status='Next chapter.';save();}catch(e){status=e.message;}render();};
 $('#portable-reset').onclick=()=>{if(!confirm('Reset only the portable browser test?'))return;localStorage.removeItem(KEY);create();status='Portable test reset.';render();};
 render();
