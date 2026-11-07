@@ -32,3 +32,26 @@ test('independent host rejects malformed save without replacing valid state',()=
  assert.throws(()=>runtime.restore(bad));
  assert.deepEqual(runtime.snapshot(),before);
 });
+
+test('host denial prevents chapter completion and changing inventory',()=>{
+ class DenyingHost extends IndependentHost {
+  event(){return {changed:false,completed:false};}
+ }
+ const runtime=new MultiChapterRegistry({packages:[compileDirectory(fixture)],hostFactory:()=>new DenyingHost()});
+ const id='sample-three-chapter';
+ runtime.choose(id,0);
+ const before=runtime.snapshot();
+ const result=runtime.event(id,'harvest.carrot');
+ assert.equal(result.changed,false);
+ assert.deepEqual(runtime.snapshot(),before);
+ assert.throws(()=>runtime.nextChapter(id),/not ready/);
+});
+test('completed chapter cannot accept the same event twice',()=>{
+ const runtime=install(),id='sample-three-chapter';
+ runtime.choose(id,0);
+ runtime.event(id,'harvest.carrot');
+ const after=runtime.snapshot();
+ const second=runtime.event(id,'harvest.carrot');
+ assert.equal(second.changed,false);
+ assert.deepEqual(runtime.snapshot(),after);
+});
