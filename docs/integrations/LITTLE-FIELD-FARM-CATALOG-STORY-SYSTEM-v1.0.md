@@ -1,8 +1,8 @@
-# Little Field Farm — Reusable Story Catalog Integration v1.0
+# Little Field Farm — Reusable Story Catalog Integration v1.0 (Historical)
 
-**Status:** Merged and player-tested in Little Field Farm on 2026-11-06. This document describes the **current farm implementation**, not the earlier Ink/inkjs prototype.
+**Historical status:** This document records the catalog-runner stage merged in PR #9. It is **not the current farm runtime**. Ink/inkjs was restored and merged through [PR #10](https://github.com/ErikEhresman-ST1987/little-field-farm/pull/10), then verified in Safari with persistence and backup/restore. For current integration instructions, use [START HERE](START-HERE.md). The remainder below is retained as a historical record, not an installation guide.
 
-## Why the implementation changed
+## Historical account: why the implementation changed
 
 The previous farm implementation embedded a Juliette-specific narrative in an Ink-generated JavaScript bundle and included story-specific controls in `main.js`. That worked for the prototype, but each new story risked requiring engine and UI edits. The operator approved replacing this approach with a single reusable, easy-to-edit catalog system.
 
